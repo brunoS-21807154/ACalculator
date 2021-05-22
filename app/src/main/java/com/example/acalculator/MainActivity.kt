@@ -1,25 +1,37 @@
 package com.example.acalculator
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.widget.AdapterView
+import android.view.View
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.item_expression.*
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.util.*
+import kotlin.collections.ArrayList
 
+const val EXTRA_HISTORY = "com.example.calculator.HISTORY"
 
 class MainActivity : AppCompatActivity() {
 
     private val TAG = MainActivity::class.java.simpleName
     private val VISOR_KEY = "visor"
-    var operation_list = arrayListOf<String>()
+    private val HISTORY_KEY = "history"
 
+    var operations = mutableListOf(
+        Operation("1+1", 2.0),
+        Operation("2+3", 5.0),
+        Operation("1+1", 2.0),
+        Operation("2+3", 5.0),
+        Operation("1+1", 2.0),
+        Operation("2+3", 5.0),
+        Operation("1+1", 2.0)
+    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,63 +47,38 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
 
-        val orientation = resources.configuration.orientation
-
-       var listAdapter = HistoryAdapter(this, R.layout.item_expression, operation_list)
-
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            list_historic.adapter = listAdapter
-
-            list_historic.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-
-                val expression = parent.getItemAtPosition(position).toString()
-                val separatedResult = expression.split('=')
-                Toast.makeText(this, "Resultado: ${separatedResult[1]}", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-
-
-        button_1.setOnClickListener { onClickNumberSymbol("1"); }
-        button_2.setOnClickListener { onClickNumberSymbol("2"); }
-        button_3.setOnClickListener { onClickNumberSymbol("3"); }
-        button_4.setOnClickListener { onClickNumberSymbol("4"); }
-        button_5.setOnClickListener { onClickNumberSymbol("5"); }
-        button_6.setOnClickListener { onClickNumberSymbol("6"); }
-        button_addition.setOnClickListener { onClickArithmeticSymbol("+"); }
-        button_subtraction.setOnClickListener { onClickArithmeticSymbol("-"); }
-        button_multiplication.setOnClickListener { onClickArithmeticSymbol("*"); }
-        button_division.setOnClickListener { onClickArithmeticSymbol("/"); }
-        button_equals.setOnClickListener { onClickEquals(listAdapter); }
-        button_clear.setOnClickListener { onClickClear(); }
-        button_backspace.setOnClickListener { onClickClearLast(); }
-
-
-
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         text_visor.text = savedInstanceState.getString(VISOR_KEY)
+
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            list_historic?.layoutManager = LinearLayoutManager(this)
+            list_historic?.adapter =
+                HistoryAdapter(this, R.layout.item_expression, operations)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.run { putString(VISOR_KEY, text_visor.text.toString()) }
+        outState.run { putParcelableArrayList(HISTORY_KEY, operations as ArrayList<Operation>) }
         super.onSaveInstanceState(outState)
     }
 
-    private fun onClickClearLast() {
+     fun onClickClearLast(view: View) {
         methodToast()
-        if(text_visor.length() > 1){
+        if (text_visor.length() > 1) {
             text_visor.text = text_visor.text.substring(0, text_visor.length() - 1)
         }
     }
 
-    private fun onClickClear() {
+     fun onClickClear(view: View) {
         methodToast()
         text_visor.text = "0"
     }
 
-    private fun onClickNumberSymbol(symbol: String) {
+    fun onClickNumberSymbol(view: View) {
+        val symbol = view.tag.toString()
         methodToast()
         Log.i(TAG, "Click no botão $symbol")
         if (text_visor.text == "0") {
@@ -101,14 +88,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onClickArithmeticSymbol(symbol: String) {
+    fun onClickArithmeticSymbol(view: View) {
+        val symbol = view.tag.toString()
         methodToast()
         Log.i(TAG, "Click no botão $symbol")
         text_visor.append(symbol)
 
     }
 
-    private fun onClickEquals(adapter: ArrayAdapter<String>) {
+     fun onClickEquals(view: View) {
         methodToast()
         var full_operation = text_visor.text.toString()
         val orientation = resources.configuration.orientation
@@ -128,13 +116,11 @@ class MainActivity : AppCompatActivity() {
             result = result.substring(0, result.length - 2)
         }
 
-        full_operation += "=$result"
-        operation_list.add(full_operation)
+        val operation = Operation(full_operation, result.toDouble())
+        operations.add(operation)
 
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            adapter.notifyDataSetChanged()
-            list_historic.smoothScrollToPosition(adapter.count-1)
-        }
+        list_historic?.adapter =
+            HistoryAdapter(this, R.layout.item_expression, operations)
 
         text_visor.text = result
         Log.i(TAG, "O resultado da expressão é ${text_visor.text}")
@@ -147,5 +133,12 @@ class MainActivity : AppCompatActivity() {
         val methodName = Thread.currentThread().stackTrace[3].methodName;
 
         Toast.makeText(this, "Método: $methodName, $time", Toast.LENGTH_SHORT).show()
+    }
+
+    fun onClickHistory(view: View){
+        val intent = Intent(this, HistoryActivity::class.java)
+        intent.apply { putParcelableArrayListExtra(EXTRA_HISTORY, ArrayList(operations)) }
+        startActivity(intent)
+        finish()
     }
 }

@@ -45,7 +45,8 @@
             android:backgroundTint="@color/light_gray"
             android:text="C"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickClear"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_backspace"
@@ -56,7 +57,8 @@
             android:backgroundTint="@color/light_gray"
             android:text="&lt;"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickClearLast"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_multiplication"
@@ -67,7 +69,9 @@
             android:backgroundTint="@color/orange"
             android:text="*"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickArithmeticSymbol"
+            android:tag="*"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_division"
@@ -78,7 +82,9 @@
             android:backgroundTint="@color/orange"
             android:text="/"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickArithmeticSymbol"
+            android:tag="/"/>
 
     </LinearLayout>
 
@@ -99,7 +105,9 @@
             android:backgroundTint="@color/dark_gray"
             android:text="4"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickNumberSymbol"
+            android:tag="4"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_5"
@@ -110,7 +118,9 @@
             android:backgroundTint="@color/dark_gray"
             android:text="5"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickNumberSymbol"
+            android:tag="5"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_6"
@@ -121,7 +131,9 @@
             android:backgroundTint="@color/dark_gray"
             android:text="6"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickNumberSymbol"
+            android:tag="6"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_subtraction"
@@ -131,7 +143,10 @@
             android:backgroundTint="@color/orange"
             android:text="-"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickArithmeticSymbol"
+            android:tag="-"
+            />
 
     </LinearLayout>
 
@@ -152,7 +167,9 @@
             android:backgroundTint="@color/dark_gray"
             android:text="1"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickNumberSymbol"
+            android:tag="1"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_2"
@@ -163,7 +180,9 @@
             android:backgroundTint="@color/dark_gray"
             android:text="2"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickNumberSymbol"
+            android:tag="2"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_3"
@@ -174,7 +193,9 @@
             android:backgroundTint="@color/dark_gray"
             android:text="3"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickNumberSymbol"
+            android:tag="3"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_addition"
@@ -184,7 +205,9 @@
             android:backgroundTint="@color/orange"
             android:text="+"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickArithmeticSymbol"
+            android:tag="+"/>
 
     </LinearLayout>
 
@@ -205,7 +228,9 @@
             android:backgroundTint="@color/dark_gray"
             android:text="0"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickNumberSymbol"
+            android:tag="0"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_dot"
@@ -216,7 +241,9 @@
             android:backgroundTint="@color/dark_gray"
             android:text="."
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickArithmeticSymbol"
+            android:tag="."/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_equals"
@@ -226,11 +253,20 @@
             android:backgroundTint="@color/orange"
             android:text="="
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="35sp"
+            android:onClick="onClickEquals"/>
+
+
 
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:onClick="onClickHistory">
 
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 </LinearLayout>
 
 
